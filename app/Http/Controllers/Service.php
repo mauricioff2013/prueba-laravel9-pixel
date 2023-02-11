@@ -5,23 +5,25 @@ use Illuminate\Support\Facades\Http;
 
 
 
+
 class Service
-{
+{private  $host="https://bottlenose-deserted-catsup.glitch.me";
 
     public function __construct()
     {      
     }
     public static function getItems()
     {
-        $response = Http::get('localhost:3300/items');
+        $objeto = new Service();
+        $response = Http::withOptions(['verify' => false])->get($objeto->host.'/items');
         $jsonData = $response->json();
-         return  $jsonData;
+        return $jsonData;
     }
 
    
     public static function deleteItem()
-    {
-        $response = Http::delete('localhost:3300/deleteItemSelected');
+    {$objeto = new Service();
+        $response = Http::withOptions(['verify' => false])->delete($objeto->host.'/deleteItemSelected');
         $jsonData = $response->json();
         if ($response->successful()) {
             return true;
@@ -32,8 +34,8 @@ class Service
     }
 
     public static function deleteAllItem()
-    {
-        $response = Http::delete('localhost:3300/deleteAllItem');
+    {$objeto = new Service();
+        $response = Http::withOptions(['verify' => false])->delete($objeto->host.'/deleteAllItem');
         if ($response->successful()) {
             return true;
         } else {
@@ -44,13 +46,13 @@ class Service
 
 
     public static function editItem(Request $request)
-    {
+    {$objeto = new Service();
         $data = [
             'id' => $request->id,
             'state'=>$request->state
         ];
      
-        $response = Http::post('localhost:3300/editItem' , $data);
+        $response = Http::withOptions(['verify' => false])->post($objeto->host.'/editItem' , $data);
     
        if ($response->successful()) {
             return response()->json(['message' => 'Agregado con Exito.'], 200);
@@ -62,12 +64,12 @@ class Service
 
 
     public static function addItem($name)
-    {
+    {$objeto = new Service();
         $data = [
             'name' => $name
         ];
-     
-        $response = Http::post('localhost:3300/addItem' , $data);
+       
+        $response = Http::withOptions(['verify' => false])->post($objeto->host.'/addItem',$data);
     
        if ($response->successful()) {
             return response()->json(['message' => 'Agregado con Exito.'], 200);
